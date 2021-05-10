@@ -79,14 +79,17 @@ int main(int argc, char *argv[])
 
 		res = TEEC_InvokeCommand(&sess, TA_TEEencrypt_CMD_ENC_VALUE, &op,
 					 &err_origin);
-
-		FILE *fp_encrypted = fopen("/root/encrypted.txt", "w");
+		char encrypted_path[100] = "/root/encrypted_";
+		strcat(encrypted_path, argv[2]);
+		FILE *fp_encrypted = fopen(encrypted_path, "w");
 
 		memcpy(ciphertext, op.params[0].tmpref.buffer, len);
 		fputs(ciphertext, fp_encrypted);
 		fclose(fp_encrypted);
 
-		FILE *fp_key = fopen("/root/key.txt", "w");
+		char key_path[100] = "/root/key_";
+		strcat(key_path, argv[2]);
+		FILE *fp_key = fopen(key_path, "w");
 		cipherkey = op.params[1].value.a;
 		fprintf(fp_key, "%d", cipherkey);
 		fclose(fp_key);
